@@ -10,6 +10,20 @@
       "StackName": "amplify-sharepic-dev-133929",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:541868056826:stack/amplify-sharepic-dev-133929/dbb0e1c0-51e0-11ed-856a-02d920989a72",
       "AmplifyAppId": "d3ljofpglnfanj"
+    },
+    "categories": {
+      "auth": {
+        "sharepic99175670": {}
+      },
+      "api": {
+        "sharepic": {}
+      },
+      "function": {
+        "sharepicf0a29b0c": {
+          "deploymentBucketName": "amplify-sharepic-dev-133929-deployment",
+          "s3Key": "amplify-builds/sharepicf0a29b0c-415a4a47372b45376a4b-build.zip"
+        }
+      }
     }
   }
 }
