@@ -67,5 +67,12 @@
       "service": "Lambda",
       "dependsOn": []
     }
+  },
+  "storage": {
+    "s3d2b35853": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }

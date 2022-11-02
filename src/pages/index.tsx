@@ -1,7 +1,10 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useAuth } from "../context/AuthContext";
 
 const Home: NextPage = () => {
+   const { user, setUser } = useAuth();
+   console.log("user", user);
    return (
       <div>
          <Head>
@@ -11,9 +14,7 @@ const Home: NextPage = () => {
          </Head>
 
          <main>
-            <h1 className="text-3xl font-bold underline">
-               Welcome to <a href="https://nextjs.org">Next.js!</a>
-            </h1>
+            <div className="h-80 bg-[#171544] bg-gradient-to-b from-[#171544] to-[#333072]"></div>
          </main>
       </div>
    );

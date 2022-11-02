@@ -24,9 +24,9 @@ interface Props {
 export default function AuthProvider({ children }: Props): ReactElement {
    const [user, setUser] = useState<CognitoUser | null>(null);
 
-   useEffect(() => {
-      checkUser();
-   }, []);
+   // useEffect(() => {
+   //    checkUser();
+   // }, []);
 
    useEffect(() => {
       Hub.listen("auth", () => {
