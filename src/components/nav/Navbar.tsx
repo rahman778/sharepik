@@ -5,8 +5,10 @@ import { FiSearch, FiPlus } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 
 import logo from "../../../public/logo.png";
-import Hamburger from "./hamburger";
+import Hamburger from "./Hamburger";
 import Sidebar from "../Sidebar";
+import { useModal } from "../../context/ModalContext";
+import { useRouter } from "next/router";
 
 interface IProps {
    searchTerm: string;
@@ -14,14 +16,25 @@ interface IProps {
 }
 
 const Navbar = ({ searchTerm, setSearchTerm }: IProps) => {
+   const router = useRouter();
+
+   const [open, setOpen] = useState<boolean>(false);
+
+   const { setShowModal } = useModal();
    const { user } = useAuth();
 
-   const [open, setOpen] = useState(false);
+   const onAddClick = (): void => {
+      if (user) {
+         router.push("/create");
+         return;
+      }
+      setShowModal(true);
+   };
 
    return (
       <>
-         <div className="flex bg-[#171544] gap-2 align-center justify-between md:gap-5 w-full p-4">
-            <div className="w-32 my-auto">
+         <div className="flex bg-[#171544] gap-2 align-center justify-between md:gap-5 w-full p-4 sticky top-0 z-[100]">
+            <div className="w-32 my-auto cursor-pointer" onClick={() => router.push(`/`)}>
                <Image src={logo} alt="logo" layout="responsive" objectFit="contain" />
             </div>
             <div className="hidden md:flex justify-start items-center grow max-w-xl px-2 rounded-sm bg-[#3e3d62] outline-none focus-within:shadow-sm">
@@ -40,16 +53,21 @@ const Navbar = ({ searchTerm, setSearchTerm }: IProps) => {
                {/* <Link href={`user-profile/${user?._id}`} className="hidden md:block">
                   <img src={user.image} alt="user-pic" className="w-14 h-12 rounded-lg " />
                </Link> */}
-               <Link href="/create-pin">
-                  <a className="bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-md w-12 h-12 md:w-10 md:h-10 flex justify-center items-center">
-                     <FiPlus color="#fff" fontSize={20} />
-                  </a>
-               </Link>
+
+               <button
+                  onClick={onAddClick}
+                  className="bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-md w-12 h-12 md:w-10 md:h-10 flex justify-center items-center"
+               >
+                  <FiPlus color="#fff" fontSize={20} />
+               </button>
                <Link href="/create-pin">
                   <a className=" text-white font-semibold text-sm">Log in</a>
                </Link>
 
-               <button className="text-white text-sm font-semibold bg-transparent border border-white px-4 py-1 rounded">
+               <button
+                  onClick={() => router.push(`/signup`)}
+                  className="text-white text-sm font-semibold bg-transparent border border-white px-4 py-1 rounded"
+               >
                   Sign up
                </button>
             </div>

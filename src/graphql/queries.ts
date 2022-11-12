@@ -14,6 +14,7 @@ export const getProfile = /* GraphQL */ `
           title
           createdAt
           category
+          description
           image
           updatedAt
           profilePostsId
@@ -54,6 +55,7 @@ export const getPost = /* GraphQL */ `
       title
       createdAt
       category
+      description
       image
       comments {
         items {
@@ -84,6 +86,7 @@ export const listPosts = /* GraphQL */ `
         title
         createdAt
         category
+        description
         image
         comments {
           nextToken
@@ -118,6 +121,7 @@ export const postsByDate = /* GraphQL */ `
         title
         createdAt
         category
+        description
         image
         comments {
           nextToken
@@ -152,6 +156,7 @@ export const searchPosts = /* GraphQL */ `
         title
         createdAt
         category
+        description
         image
         comments {
           nextToken
@@ -188,6 +193,7 @@ export const getComment = /* GraphQL */ `
         title
         createdAt
         category
+        description
         image
         comments {
           nextToken
@@ -218,6 +224,7 @@ export const listComments = /* GraphQL */ `
           title
           createdAt
           category
+          description
           image
           updatedAt
           profilePostsId

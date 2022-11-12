@@ -5,6 +5,7 @@ import awsconfig from "../aws-exports";
 import { ToastContainer } from "react-toastify";
 import AuthProvider from "../context/AuthContext";
 import Navbar from "../components/nav/Navbar";
+import ModalProvider from "../context/ModalContext";
 
 Amplify.configure({ ...awsconfig, ssr: true });
 
@@ -12,8 +13,10 @@ function MyApp({ Component, pageProps }: AppProps) {
    return (
       <>
          <AuthProvider>
-            <Navbar />
-            <Component {...pageProps} />
+            <ModalProvider>
+               <Navbar />
+               <Component {...pageProps} />
+            </ModalProvider>
          </AuthProvider>
          <ToastContainer />
       </>

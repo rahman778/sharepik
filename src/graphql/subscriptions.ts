@@ -17,6 +17,7 @@ export const onCreateProfile = /* GraphQL */ `
           title
           createdAt
           category
+          description
           image
           updatedAt
           profilePostsId
@@ -44,6 +45,7 @@ export const onUpdateProfile = /* GraphQL */ `
           title
           createdAt
           category
+          description
           image
           updatedAt
           profilePostsId
@@ -71,6 +73,7 @@ export const onDeleteProfile = /* GraphQL */ `
           title
           createdAt
           category
+          description
           image
           updatedAt
           profilePostsId
@@ -93,6 +96,7 @@ export const onCreatePost = /* GraphQL */ `
       title
       createdAt
       category
+      description
       image
       comments {
         items {
@@ -121,6 +125,7 @@ export const onUpdatePost = /* GraphQL */ `
       title
       createdAt
       category
+      description
       image
       comments {
         items {
@@ -149,6 +154,7 @@ export const onDeletePost = /* GraphQL */ `
       title
       createdAt
       category
+      description
       image
       comments {
         items {
@@ -179,6 +185,7 @@ export const onCreateComment = /* GraphQL */ `
         title
         createdAt
         category
+        description
         image
         comments {
           nextToken
@@ -207,6 +214,7 @@ export const onUpdateComment = /* GraphQL */ `
         title
         createdAt
         category
+        description
         image
         comments {
           nextToken
@@ -235,6 +243,7 @@ export const onDeleteComment = /* GraphQL */ `
         title
         createdAt
         category
+        description
         image
         comments {
           nextToken

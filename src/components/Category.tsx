@@ -24,7 +24,9 @@ function Category({ name, image, onCategoryClick }: IProps) {
                </div>
             </div>
          </div>
-         <h3 className="text-center mt-4 text-slate-200 text-sm tracking-wider">{name}</h3>
+         <h3 className="text-center mt-4 text-slate-200 text-sm tracking-wider capitalize">
+            {name}
+         </h3>
       </div>
    );
 }

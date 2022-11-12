@@ -6,20 +6,13 @@ import Category from "../components/Category";
 import CategoryCarousel from "../components/CategoryCarousel";
 import { useAuth } from "../context/AuthContext";
 import Card from "../components/Card";
+import SigninModal from "../components/modals/SigninModal";
+import { useModal } from "../context/ModalContext";
 
 const Home: NextPage = () => {
    const { user, setUser } = useAuth();
-   <style jsx>{`
-      .masonry {
-         column-count: 3;
-         column-gap: 2rem;
-      }
-      @screen lg {
-         .masonry {
-            column-count: 4;
-         }
-      }
-   `}</style>;
+   const { showModal, setShowModal } = useModal();
+
    return (
       <div>
          <Head>
@@ -46,6 +39,7 @@ const Home: NextPage = () => {
                </div>
             </div>
          </main>
+         {showModal && <SigninModal closeModal={() => setShowModal(false)} />}
       </div>
    );
 };
