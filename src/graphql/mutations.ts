@@ -14,19 +14,32 @@ export const createProfile = /* GraphQL */ `
       posts {
         items {
           id
+          profileID
           title
           createdAt
           category
           description
           image
           updatedAt
-          profilePostsId
+          owner
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          profileID
+          postID
+          content
+          createdAt
+          updatedAt
           owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -42,19 +55,32 @@ export const updateProfile = /* GraphQL */ `
       posts {
         items {
           id
+          profileID
           title
           createdAt
           category
           description
           image
           updatedAt
-          profilePostsId
+          owner
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          profileID
+          postID
+          content
+          createdAt
+          updatedAt
           owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -70,19 +96,32 @@ export const deleteProfile = /* GraphQL */ `
       posts {
         items {
           id
+          profileID
           title
           createdAt
           category
           description
           image
           updatedAt
-          profilePostsId
+          owner
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          profileID
+          postID
+          content
+          createdAt
+          updatedAt
           owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -93,24 +132,39 @@ export const createPost = /* GraphQL */ `
   ) {
     createPost(input: $input, condition: $condition) {
       id
+      profileID
       title
       createdAt
       category
       description
       image
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       comments {
         items {
           id
+          profileID
+          postID
           content
           createdAt
           updatedAt
-          postCommentsId
           owner
         }
         nextToken
       }
       updatedAt
-      profilePostsId
       owner
     }
   }
@@ -122,24 +176,39 @@ export const updatePost = /* GraphQL */ `
   ) {
     updatePost(input: $input, condition: $condition) {
       id
+      profileID
       title
       createdAt
       category
       description
       image
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       comments {
         items {
           id
+          profileID
+          postID
           content
           createdAt
           updatedAt
-          postCommentsId
           owner
         }
         nextToken
       }
       updatedAt
-      profilePostsId
       owner
     }
   }
@@ -151,24 +220,39 @@ export const deletePost = /* GraphQL */ `
   ) {
     deletePost(input: $input, condition: $condition) {
       id
+      profileID
       title
       createdAt
       category
       description
       image
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       comments {
         items {
           id
+          profileID
+          postID
           content
           createdAt
           updatedAt
-          postCommentsId
           owner
         }
         nextToken
       }
       updatedAt
-      profilePostsId
       owner
     }
   }
@@ -180,24 +264,47 @@ export const createComment = /* GraphQL */ `
   ) {
     createComment(input: $input, condition: $condition) {
       id
+      profileID
+      postID
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       post {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       content
       createdAt
       updatedAt
-      postCommentsId
       owner
     }
   }
@@ -209,24 +316,47 @@ export const updateComment = /* GraphQL */ `
   ) {
     updateComment(input: $input, condition: $condition) {
       id
+      profileID
+      postID
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       post {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       content
       createdAt
       updatedAt
-      postCommentsId
       owner
     }
   }
@@ -238,24 +368,47 @@ export const deleteComment = /* GraphQL */ `
   ) {
     deleteComment(input: $input, condition: $condition) {
       id
+      profileID
+      postID
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       post {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       content
       createdAt
       updatedAt
-      postCommentsId
       owner
     }
   }

@@ -9,10 +9,11 @@ import Hamburger from "./Hamburger";
 import Sidebar from "../Sidebar";
 import { useModal } from "../../context/ModalContext";
 import { useRouter } from "next/router";
+import Dropdown from "../Dropdown";
 
 interface IProps {
-   searchTerm: string;
-   setSearchTerm: Dispatch<SetStateAction<string>>;
+   searchTerm?: string;
+   setSearchTerm?: Dispatch<SetStateAction<string>>;
 }
 
 const Navbar = ({ searchTerm, setSearchTerm }: IProps) => {
@@ -60,16 +61,22 @@ const Navbar = ({ searchTerm, setSearchTerm }: IProps) => {
                >
                   <FiPlus color="#fff" fontSize={20} />
                </button>
-               <Link href="/create-pin">
-                  <a className=" text-white font-semibold text-sm">Log in</a>
-               </Link>
+               {user ? (
+                  <Dropdown user={user} />
+               ) : (
+                  <>
+                     <Link href="/login">
+                        <a className=" text-white font-semibold text-sm">Log in</a>
+                     </Link>
 
-               <button
-                  onClick={() => router.push(`/signup`)}
-                  className="text-white text-sm font-semibold bg-transparent border border-white px-4 py-1 rounded"
-               >
-                  Sign up
-               </button>
+                     <button
+                        onClick={() => router.push(`/signup`)}
+                        className="text-white text-sm font-semibold bg-transparent border border-white px-4 py-1 rounded"
+                     >
+                        Sign up
+                     </button>
+                  </>
+               )}
             </div>
             <div className="block md:hidden z-20">
                <Hamburger open={open} setOpen={setOpen} />

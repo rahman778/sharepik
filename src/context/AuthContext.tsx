@@ -7,8 +7,8 @@ import {
    useEffect,
    useState,
 } from "react";
-import { CognitoUser } from "@aws-amplify/auth";
 import { Auth, Hub } from "aws-amplify";
+import { CognitoUser } from "@aws-amplify/auth";
 
 interface IAuthContext {
    user: CognitoUser | null;
@@ -23,6 +23,8 @@ interface Props {
 
 export default function AuthProvider({ children }: Props): ReactElement {
    const [user, setUser] = useState<CognitoUser | null>(null);
+
+   console.log("user", user);
 
    // useEffect(() => {
    //    checkUser();

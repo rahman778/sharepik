@@ -11,19 +11,32 @@ export const getProfile = /* GraphQL */ `
       posts {
         items {
           id
+          profileID
           title
           createdAt
           category
           description
           image
           updatedAt
-          profilePostsId
+          owner
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          profileID
+          postID
+          content
+          createdAt
+          updatedAt
           owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -41,8 +54,12 @@ export const listProfiles = /* GraphQL */ `
         posts {
           nextToken
         }
+        comments {
+          nextToken
+        }
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -52,24 +69,39 @@ export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
       id
+      profileID
       title
       createdAt
       category
       description
       image
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       comments {
         items {
           id
+          profileID
+          postID
           content
           createdAt
           updatedAt
-          postCommentsId
           owner
         }
         nextToken
       }
       updatedAt
-      profilePostsId
       owner
     }
   }
@@ -83,16 +115,24 @@ export const listPosts = /* GraphQL */ `
     listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       nextToken
@@ -118,16 +158,24 @@ export const postsByDate = /* GraphQL */ `
     ) {
       items {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       nextToken
@@ -153,16 +201,24 @@ export const searchPosts = /* GraphQL */ `
     ) {
       items {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       nextToken
@@ -188,24 +244,47 @@ export const getComment = /* GraphQL */ `
   query GetComment($id: ID!) {
     getComment(id: $id) {
       id
+      profileID
+      postID
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       post {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       content
       createdAt
       updatedAt
-      postCommentsId
       owner
     }
   }
@@ -219,21 +298,30 @@ export const listComments = /* GraphQL */ `
     listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        profileID
+        postID
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         post {
           id
+          profileID
           title
           createdAt
           category
           description
           image
           updatedAt
-          profilePostsId
           owner
         }
         content
         createdAt
         updatedAt
-        postCommentsId
         owner
       }
       nextToken

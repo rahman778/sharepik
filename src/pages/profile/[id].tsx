@@ -1,16 +1,25 @@
+import { withSSRContext } from "aws-amplify";
+import { GetServerSideProps, GetServerSidePropsResult } from "next";
+import { ParsedUrlQuery } from "querystring";
 import { useState } from "react";
-import { AiOutlineLogout } from "react-icons/ai";
-import { useAuth } from "../context/AuthContext";
+import { GetProfileQuery, Profile } from "../../API";
+import Card from "../../components/Card";
+import { useAuth } from "../../context/AuthContext";
+import { getProfile } from "../../graphql/queries";
 
-type Props = {};
+type PageProps = {
+   profile: Profile;
+};
 
 const activeBtnStyles =
    "bg-teal-500 text-white font-semibold py-2 px-5 rounded-xl w-28 outline-none";
 const notActiveBtnStyles =
    "bg-primary text-black font-semibold py-2 px-5 rounded w-28 outline-none";
 
-function Profile({}: Props) {
+function Profile({ profile }: PageProps) {
    const [activeBtn, setActiveBtn] = useState<string>("created");
+
+   console.log("profile", profile);
 
    const { user } = useAuth();
 
@@ -31,17 +40,7 @@ function Profile({}: Props) {
                      {name.charAt(0)}
                   </div>
                </div>
-               <h1 className="font-bold text-3xl text-center mt-3">{user?.userName}</h1>
-               <div className="absolute top-0 z-1 right-0 p-2">
-                  <button
-                     type="button"
-                     className=" bg-white p-2 rounded-full cursor-pointer outline-none shadow-md"
-                     //onClick={renderProps.onClick}
-                     //disabled={renderProps.disabled}
-                  >
-                     <AiOutlineLogout color="red" fontSize={21} />
-                  </button>
-               </div>
+               <h1 className="font-bold text-3xl text-center mt-3">{profile?.username}</h1>
             </div>
             <div className="flex justify-center space-x-2">
                <button
@@ -63,6 +62,17 @@ function Profile({}: Props) {
                   Saved
                </button>
             </div>
+            <div className="px-3 mx-auto mt-4">
+               {activeBtn === "created" && (
+                  <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4">
+                     {profile.posts!.items.map((post) => (
+                        <div className="w-full mb-4" key={post!.id}>
+                           <Card post={post!} />
+                        </div>
+                     ))}
+                  </div>
+               )}
+            </div>
 
             {/* <div className="px-2">
        <MasonryLayout pins={pins} />
@@ -79,3 +89,24 @@ function Profile({}: Props) {
 }
 
 export default Profile;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+   const SSR = withSSRContext();
+
+   console.log(context);
+
+   const { id } = context.params!;
+
+   const response = (await SSR.API.graphql({
+      query: getProfile,
+      variables: {
+         id,
+      },
+   })) as {
+      data: GetProfileQuery;
+   };
+
+   return {
+      props: response.data.getProfile as Profile,
+   };
+};

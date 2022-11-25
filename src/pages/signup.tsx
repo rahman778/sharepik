@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Auth } from "aws-amplify";
 import { CognitoUser } from "@aws-amplify/auth";
@@ -96,7 +96,11 @@ function Signup({}: Props) {
          </div>
          <div className="w-full lg:w-1/2 px-5 lg:px-10">
             <div className="mx-auto mb-6 w-40">
-               <Image src={logo} alt="logo" layout="responsive" objectFit="contain" />
+               <Link href="/">
+                  <a>
+                     <Image src={logo} alt="logo" layout="responsive" objectFit="contain" />
+                  </a>
+               </Link>
             </div>
             <h3 className="font-semibold text-neutral-700 text-2xl mb-8 text-center">
                Create an account
@@ -122,7 +126,7 @@ function Signup({}: Props) {
                      {...register("password", {
                         required: { value: true, message: "Please enter a password." },
                         minLength: {
-                           value: 6,
+                           value: 8,
                            message: "Please enter a stronger password.",
                         },
                      })}

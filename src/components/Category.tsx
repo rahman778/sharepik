@@ -3,12 +3,12 @@ import Image from "next/image";
 interface IProps {
    name: string;
    image: string;
-   onCategoryClick: React.MouseEventHandler<HTMLDivElement>;
+   onCategoryClick: (name: string) => void;
 }
 
 function Category({ name, image, onCategoryClick }: IProps) {
    return (
-      <div className="text-black w-[170px] ml-6 group" onClick={onCategoryClick}>
+      <div className="text-black w-[170px] ml-6 group" onClick={() => onCategoryClick(name)}>
          <div className="bg-white/10 w-[120px] h-[120px] p-[3px] my-0 mx-auto rounded-full">
             <div className="border-[3px] overflow-hidden border-cyan-500 bg-cyan-500 rounded-full">
                <div className="">

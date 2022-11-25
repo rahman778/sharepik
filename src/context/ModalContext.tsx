@@ -8,7 +8,7 @@ interface IModalContext {
 const ModalContext = createContext<IModalContext>({} as IModalContext);
 
 interface Props {
-   children: React.ReactElement;
+   children: React.ReactElement[];
 }
 
 export default function ModalProvider({ children }: Props): ReactElement {

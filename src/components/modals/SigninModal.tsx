@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { Auth } from "aws-amplify";
 import { toast } from "react-toastify";
 import { useModal } from "../../context/ModalContext";
 import Input from "../forms/FormElements";
@@ -16,6 +18,7 @@ type Props = {
 };
 
 function SigninModal({ closeModal }: Props) {
+   const router = useRouter();
    const [isLoading, setisLoading] = useState<boolean>(false);
 
    const { setShowModal } = useModal();
@@ -31,10 +34,13 @@ function SigninModal({ closeModal }: Props) {
    const onSubmit: SubmitHandler<IFormInput> = async (data) => {
       setisLoading(true);
       try {
+         await Auth.signIn(data.email, data.password);
+         router.push(`/`);
       } catch (e: any) {
          toast.error(e.message);
       }
       setisLoading(false);
+      setShowModal(false);
    };
 
    return (

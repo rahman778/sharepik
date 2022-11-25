@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { API, Storage } from "aws-amplify";
 import { v4 as uuidv4 } from "uuid";
 import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api";
+import { toast } from "react-toastify";
 
 import { createPost } from "../graphql/mutations";
 import { CreatePostInput, CreatePostMutation } from "../API";
@@ -21,10 +22,11 @@ interface IFormInput {
 interface Props {}
 
 export default function Create({}: Props): ReactElement {
+   const router = useRouter();
+
    const [file, setFile] = useState<File | null>(null);
    const [fileError, setFileError] = useState<boolean>(false);
-
-   const router = useRouter();
+   const [loading, setLoading] = useState<boolean>(false);
 
    const {
       register,
@@ -33,14 +35,12 @@ export default function Create({}: Props): ReactElement {
    } = useForm<IFormInput>();
 
    const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-      console.log(file);
-      console.log(data);
-
       if (!file) {
          setFileError(true);
          return;
       }
 
+      setLoading(true);
       // User uploaded file
       // Send a request to upload to the S3 Bucket.
       try {
@@ -53,6 +53,7 @@ export default function Create({}: Props): ReactElement {
          const createNewPostInput: CreatePostInput = {
             title: data.title,
             description: data.description,
+            category: data.category,
             image: imagePath,
          };
 
@@ -62,12 +63,13 @@ export default function Create({}: Props): ReactElement {
             authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS,
          })) as { data: CreatePostMutation };
 
-         console.log("New post created successfully:", res);
-
-         router.push(`/post/${res.data.createPost.id}`);
-      } catch (error) {
-         console.error("Error uploading file: ", error);
+         router.push(`/post/${res?.data?.createPost?.id}`);
+      } catch (e: any) {
+         console.error("Error uploading file: ", e);
+         toast.error(e.message);
       }
+
+      setLoading(false);
    };
 
    return (
@@ -175,8 +177,7 @@ export default function Create({}: Props): ReactElement {
                   </p>
                </div>
 
-               {/* Button to submit the form with those contents */}
-               <SubmitButton title=" Create Post" />
+               <SubmitButton title=" Create Post" loading={loading} />
             </div>
          </form>
       </div>

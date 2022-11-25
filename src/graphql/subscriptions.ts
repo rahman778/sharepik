@@ -5,84 +5,123 @@
 export const onCreateProfile = /* GraphQL */ `
   subscription OnCreateProfile(
     $filter: ModelSubscriptionProfileFilterInput
-    $username: String
+    $owner: String
   ) {
-    onCreateProfile(filter: $filter, username: $username) {
+    onCreateProfile(filter: $filter, owner: $owner) {
       id
       username
       email
       posts {
         items {
           id
+          profileID
           title
           createdAt
           category
           description
           image
           updatedAt
-          profilePostsId
+          owner
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          profileID
+          postID
+          content
+          createdAt
+          updatedAt
           owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateProfile = /* GraphQL */ `
   subscription OnUpdateProfile(
     $filter: ModelSubscriptionProfileFilterInput
-    $username: String
+    $owner: String
   ) {
-    onUpdateProfile(filter: $filter, username: $username) {
+    onUpdateProfile(filter: $filter, owner: $owner) {
       id
       username
       email
       posts {
         items {
           id
+          profileID
           title
           createdAt
           category
           description
           image
           updatedAt
-          profilePostsId
+          owner
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          profileID
+          postID
+          content
+          createdAt
+          updatedAt
           owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteProfile = /* GraphQL */ `
   subscription OnDeleteProfile(
     $filter: ModelSubscriptionProfileFilterInput
-    $username: String
+    $owner: String
   ) {
-    onDeleteProfile(filter: $filter, username: $username) {
+    onDeleteProfile(filter: $filter, owner: $owner) {
       id
       username
       email
       posts {
         items {
           id
+          profileID
           title
           createdAt
           category
           description
           image
           updatedAt
-          profilePostsId
+          owner
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          profileID
+          postID
+          content
+          createdAt
+          updatedAt
           owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -93,24 +132,39 @@ export const onCreatePost = /* GraphQL */ `
   ) {
     onCreatePost(filter: $filter, owner: $owner) {
       id
+      profileID
       title
       createdAt
       category
       description
       image
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       comments {
         items {
           id
+          profileID
+          postID
           content
           createdAt
           updatedAt
-          postCommentsId
           owner
         }
         nextToken
       }
       updatedAt
-      profilePostsId
       owner
     }
   }
@@ -122,24 +176,39 @@ export const onUpdatePost = /* GraphQL */ `
   ) {
     onUpdatePost(filter: $filter, owner: $owner) {
       id
+      profileID
       title
       createdAt
       category
       description
       image
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       comments {
         items {
           id
+          profileID
+          postID
           content
           createdAt
           updatedAt
-          postCommentsId
           owner
         }
         nextToken
       }
       updatedAt
-      profilePostsId
       owner
     }
   }
@@ -151,24 +220,39 @@ export const onDeletePost = /* GraphQL */ `
   ) {
     onDeletePost(filter: $filter, owner: $owner) {
       id
+      profileID
       title
       createdAt
       category
       description
       image
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       comments {
         items {
           id
+          profileID
+          postID
           content
           createdAt
           updatedAt
-          postCommentsId
           owner
         }
         nextToken
       }
       updatedAt
-      profilePostsId
       owner
     }
   }
@@ -180,24 +264,47 @@ export const onCreateComment = /* GraphQL */ `
   ) {
     onCreateComment(filter: $filter, owner: $owner) {
       id
+      profileID
+      postID
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       post {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       content
       createdAt
       updatedAt
-      postCommentsId
       owner
     }
   }
@@ -209,24 +316,47 @@ export const onUpdateComment = /* GraphQL */ `
   ) {
     onUpdateComment(filter: $filter, owner: $owner) {
       id
+      profileID
+      postID
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       post {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       content
       createdAt
       updatedAt
-      postCommentsId
       owner
     }
   }
@@ -238,24 +368,47 @@ export const onDeleteComment = /* GraphQL */ `
   ) {
     onDeleteComment(filter: $filter, owner: $owner) {
       id
+      profileID
+      postID
+      profile {
+        id
+        username
+        email
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        createdAt
+        updatedAt
+        owner
+      }
       post {
         id
+        profileID
         title
         createdAt
         category
         description
         image
+        profile {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          owner
+        }
         comments {
           nextToken
         }
         updatedAt
-        profilePostsId
         owner
       }
       content
       createdAt
       updatedAt
-      postCommentsId
       owner
     }
   }
