@@ -1,12 +1,13 @@
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { Auth } from "aws-amplify";
+
 import { AiOutlineLogout } from "react-icons/ai";
-import { CognitoUser } from "@aws-amplify/auth";
+import { ICognitoUser } from "../context/AuthContext";
+import getUserName from "../utils/getUserName";
 
 type Props = {
-   user: CognitoUser;
+   user: ICognitoUser;
 };
 
 function Dropdown({ user }: Props) {
@@ -39,7 +40,7 @@ function Dropdown({ user }: Props) {
                onClick={() => setShowDropdown(!showDropdown)}
             >
                <span className="sr-only">Open user menu</span>
-               {user?.attributes?.email.substring(0, user?.attributes?.email.indexOf("@"))}
+               {getUserName(user?.attributes?.email)}
                <svg
                   className="w-4 h-4 mx-1.5"
                   aria-hidden="true"

@@ -1,69 +1,65 @@
 import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import { categories } from "../utils/data";
-import Category from "../components/Category";
+import { API } from "aws-amplify";
+import { toast } from "react-toastify";
+
 import CategoryCarousel from "../components/CategoryCarousel";
-import { useAuth } from "../context/AuthContext";
 import Card from "../components/Card";
 import SigninModal from "../components/modals/SigninModal";
 import { useModal } from "../context/ModalContext";
 import { ListPostsQuery, Post, SearchPostsQuery } from "../API";
-
-import { API } from "aws-amplify";
 import { listPosts, searchPosts } from "../graphql/queries";
-import { toast } from "react-toastify";
 import { CardSkeleton } from "../components/Skeleton";
 
 const Home: NextPage = () => {
-   const { user, setUser } = useAuth();
    const { showModal, setShowModal } = useModal();
 
    const [posts, setPosts] = useState<Post[]>([]);
    const [fetchingPosts, setFetchingPosts] = useState<boolean>(false);
    const [nextToken, setNextToken] = useState<string | null>(null);
 
-   // useEffect(() => {
-   //    const fetchPosts = async (): Promise<Post[]> => {
-   // setFetchingPosts(true);
-   //       const allPosts = (await API.graphql({ query: listPosts })) as {
-   //          data: ListPostsQuery;
-   //          errors: any[];
-   //       };
+   useEffect(() => {
+      const fetchPosts = async (): Promise<Post[]> => {
+         setFetchingPosts(true);
+         const allPosts = (await API.graphql({ query: listPosts })) as {
+            data: ListPostsQuery;
+            errors: any[];
+         };
 
-   //       if (allPosts.data) {
-   //          setPosts(allPosts?.data?.listPosts?.items as Post[]);
-   //          return allPosts?.data?.listPosts?.items as Post[];
-   //       } else {
-   //          toast.error("Could not get posts");
-   //          throw new Error("Could not get posts");
-   //       }
-   // setFetchingPosts(false);
-   //    };
+         setFetchingPosts(false);
 
-   //    fetchPosts();
-   // }, []);
+         if (allPosts.data) {
+            setPosts(allPosts?.data?.listPosts?.items as Post[]);
+            return allPosts?.data?.listPosts?.items as Post[];
+         } else {
+            toast.error("Could not get posts");
+            throw new Error("Could not get posts");
+         }
+      };
+
+      fetchPosts();
+   }, []);
 
    console.log("posts", posts);
 
    const onCategoryClick = async (name: string): Promise<void> => {
       setFetchingPosts(true);
-      // const searchCategory = (await API.graphql({
-      //    query: searchPosts,
-      //    variables: {
-      //       filter: { category: { matchPhrase: name } },
-      //       limit: 20,
-      //       nextToken: nextToken,
-      //    },
-      // })) as { data: SearchPostsQuery };
-      // if (searchCategory.data) {
-      //    setPosts(searchCategory?.data?.searchPosts?.items as Post[]);
-      //    setNextToken(searchCategory?.data?.searchPosts?.nextToken as string);
-      // } else {
-      //    toast.error("Could not get posts");
-      //    throw new Error("Could not get posts");
-      // }
+      const searchCategory = (await API.graphql({
+         query: searchPosts,
+         variables: {
+            filter: { category: { matchPhrase: name } },
+            limit: 20,
+            nextToken: nextToken,
+         },
+      })) as { data: SearchPostsQuery };
+      if (searchCategory.data) {
+         setPosts(searchCategory?.data?.searchPosts?.items as Post[]);
+         setNextToken(searchCategory?.data?.searchPosts?.nextToken as string);
+      } else {
+         toast.error("Could not get posts");
+         throw new Error("Could not get posts");
+      }
       setFetchingPosts(false);
    };
 

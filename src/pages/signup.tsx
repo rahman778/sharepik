@@ -5,9 +5,8 @@ import { CognitoUser } from "@aws-amplify/auth";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext";
-import Input from "../components/forms/FormElements";
 
+import Input from "../components/forms/FormElements";
 import authPic from "../../public/auth-img.jpg";
 import logo from "../../public/logo.png";
 import Link from "next/link";
@@ -23,7 +22,6 @@ type Props = {};
 
 function Signup({}: Props) {
    const router = useRouter();
-   const { user, setUser } = useAuth();
 
    const [isLoading, setisLoading] = useState<boolean>(false);
    const [showCode, setShowCode] = useState<boolean>(false);

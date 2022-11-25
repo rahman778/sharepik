@@ -1,14 +1,14 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { FiSearch, FiPlus } from "react-icons/fi";
-import { useAuth } from "../../context/AuthContext";
 
+import { useAuth } from "../../context/AuthContext";
 import logo from "../../../public/logo.png";
 import Hamburger from "./Hamburger";
 import Sidebar from "../Sidebar";
 import { useModal } from "../../context/ModalContext";
-import { useRouter } from "next/router";
 import Dropdown from "../Dropdown";
 
 interface IProps {
@@ -38,9 +38,11 @@ const Navbar = ({ searchTerm, setSearchTerm }: IProps) => {
             <div className="w-32 my-auto cursor-pointer" onClick={() => router.push(`/`)}>
                <Image src={logo} alt="logo" layout="responsive" objectFit="contain" />
             </div>
+            {/* TO DO */}
             <div className="hidden md:flex justify-start items-center grow max-w-xl px-2 rounded-sm bg-[#3e3d62] outline-none focus-within:shadow-sm">
                <input
                   type="text"
+                  /* @ts-ignore */
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search images"
                   value={searchTerm}
@@ -51,10 +53,6 @@ const Navbar = ({ searchTerm, setSearchTerm }: IProps) => {
             </div>
 
             <div className="hidden md:flex gap-x-6 my-auto items-center">
-               {/* <Link href={`user-profile/${user?._id}`} className="hidden md:block">
-                  <img src={user.image} alt="user-pic" className="w-14 h-12 rounded-lg " />
-               </Link> */}
-
                <button
                   onClick={onAddClick}
                   className="bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-md w-12 h-12 md:w-10 md:h-10 flex justify-center items-center"

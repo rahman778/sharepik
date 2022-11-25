@@ -1,11 +1,11 @@
-import { withSSRContext } from "aws-amplify";
-import { GetServerSideProps, GetServerSidePropsResult } from "next";
-import { ParsedUrlQuery } from "querystring";
 import { useState } from "react";
+import { withSSRContext } from "aws-amplify";
+import { GetServerSideProps } from "next";
+
 import { GetProfileQuery, Profile } from "../../API";
 import Card from "../../components/Card";
-import { useAuth } from "../../context/AuthContext";
 import { getProfile } from "../../graphql/queries";
+import getUserName from "../../utils/getUserName";
 
 type PageProps = {
    profile: Profile;
@@ -21,10 +21,6 @@ function Profile({ profile }: PageProps) {
 
    console.log("profile", profile);
 
-   const { user } = useAuth();
-
-   const name = "rahman";
-
    return (
       <div className="relative pb-2 h-full justify-center items-center">
          <div className="flex flex-col pb-5">
@@ -37,7 +33,7 @@ function Profile({ profile }: PageProps) {
                   />
 
                   <div className="capitalize bg-[#3E3D62] flex items-center justify-center text-5xl font-bold text-white rounded-full w-20 h-20 -mt-10 shadow-xl">
-                     {name.charAt(0)}
+                     {getUserName(profile?.email)}
                   </div>
                </div>
                <h1 className="font-bold text-3xl text-center mt-3">{profile?.username}</h1>
@@ -73,16 +69,6 @@ function Profile({ profile }: PageProps) {
                   </div>
                )}
             </div>
-
-            {/* <div className="px-2">
-       <MasonryLayout pins={pins} />
-     </div>
-
-     {pins?.length === 0 && (
-     <div className="flex justify-center font-bold items-center w-full text-1xl mt-2">
-       No Pins Found!
-     </div> 
-     )}*/}
          </div>
       </div>
    );

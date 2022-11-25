@@ -1,9 +1,7 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 
-type CarouselProps = {};
-
-export function CategorySkeleton({}: CarouselProps) {
+export function CategorySkeleton() {
    return (
       <div className="w-[170px] ml-6">
          <div className="w-[120px] h-[125px] my-0 mx-auto rounded-full">

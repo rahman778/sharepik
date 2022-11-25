@@ -8,10 +8,10 @@ import { toast } from "react-toastify";
 
 import { createPost } from "../graphql/mutations";
 import { CreatePostInput, CreatePostMutation } from "../API";
-
 import SubmitButton from "../components/forms/SubmitButton";
 import ImageDropper from "../components/ImageDropper";
 import { categories } from "../utils/data";
+import { useAuth } from "../context/AuthContext";
 
 interface IFormInput {
    title: string;
@@ -23,6 +23,7 @@ interface Props {}
 
 export default function Create({}: Props): ReactElement {
    const router = useRouter();
+   const { user } = useAuth();
 
    const [file, setFile] = useState<File | null>(null);
    const [fileError, setFileError] = useState<boolean>(false);
@@ -51,6 +52,7 @@ export default function Create({}: Props): ReactElement {
          });
 
          const createNewPostInput: CreatePostInput = {
+            profileID: user!.username,
             title: data.title,
             description: data.description,
             category: data.category,

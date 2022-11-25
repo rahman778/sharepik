@@ -1,9 +1,13 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { API, withSSRContext, Storage } from "aws-amplify";
+import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api";
 import { ParsedUrlQuery } from "querystring";
 import dayjs from "dayjs";
+import Link from "next/link";
+import { useForm, SubmitHandler } from "react-hook-form";
 import relativeTime from "dayjs/plugin/relativeTime";
+
 import { listPosts, getPost } from "../../graphql/queries";
 import {
    ListPostsQuery,
@@ -14,15 +18,9 @@ import {
    Comment,
 } from "../../API";
 import PostComment from "../../components/PostComment";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { createComment } from "../../graphql/mutations";
-import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api";
-import { useState } from "react";
-import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
 import Avatar from "../../components/Avatar";
-import formatDate from "../../lib/formatDate";
-import { useRouter } from "next/router";
 import { MdDownloadForOffline } from "react-icons/md";
 import ImagePreview from "../../components/ImagePreview";
 
@@ -38,11 +36,10 @@ dayjs.extend(relativeTime);
 
 export default function IndividualPost({ post }: Props): ReactElement {
    const { user } = useAuth();
-   const router = useRouter();
 
    const [addingComment, setAddingComment] = useState(false);
+   const [postImage, setPostImage] = useState<string | undefined>(undefined);
    const [comments, setComments] = useState<Comment[]>(post?.comments?.items as Comment[]);
-   console.log("comments", comments);
 
    const {
       register,
@@ -58,13 +55,27 @@ export default function IndividualPost({ post }: Props): ReactElement {
       }
    }, [formState, reset]);
 
+   useEffect(() => {
+      async function getImageFromStorage() {
+         try {
+            const signedURL = await Storage.get(post.image); // get key from Storage.list
+            // @ts-ignore
+            setPostImage(signedURL);
+         } catch (error) {
+            console.log("No image found.");
+         }
+      }
+
+      getImageFromStorage();
+   }, [post.image]);
+
    const onSubmit: SubmitHandler<IFormInput> = async (data) => {
       if (user) {
          setAddingComment(true);
 
          const newCommentInput: CreateCommentInput = {
             postID: post.id,
-            profileID: user.sub,
+            profileID: user.username,
             content: data.comment,
          };
          // Add Comment Mutation
@@ -84,7 +95,7 @@ export default function IndividualPost({ post }: Props): ReactElement {
       <div className="container mx-auto">
          <div className="flex flex-col lg:flex-row m-auto bg-white max-w-[1500px] mt-10 lg:gap-x-6">
             <div className="lg:w-4/6 lg:px-4">
-               <ImagePreview imageId={post.image} />
+               <ImagePreview image={postImage!} />
                <div>
                   {/* Start rendering comments */}
                   {user && (
@@ -141,8 +152,16 @@ export default function IndividualPost({ post }: Props): ReactElement {
                      <p className="mt-4">{post.description}</p>
                   </div>
                   <button className="bg-teal-500 flex items-center justify-center py-2 w-48 mt-5 rounded-md text-white font-semibold">
-                     <MdDownloadForOffline color="#fff" fontSize={22} />
-                     <span className="ml-3">Download</span>
+                     <a
+                        href={`${postImage}?dl=`}
+                        download
+                        onClick={(e) => {
+                           e.stopPropagation();
+                        }}
+                     >
+                        <MdDownloadForOffline color="#fff" fontSize={22} />
+                        <span className="ml-3">Download</span>
+                     </a>
                   </button>
                </div>
             </div>

@@ -11,7 +11,6 @@ interface Props {
 dayjs.extend(relativeTime);
 
 export default function PostComment({ comment }: Props): ReactElement {
-   console.log("comment:", comment);
    return (
       <>
          <div className="flex flex-row gap-4 mt-6 items-center">

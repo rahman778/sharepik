@@ -1,9 +1,10 @@
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Auth } from "aws-amplify";
 import { toast } from "react-toastify";
+
 import { useModal } from "../../context/ModalContext";
 import Input from "../forms/FormElements";
 import SubmitButton from "../forms/SubmitButton";

@@ -1,13 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import { RiHomeFill } from "react-icons/ri";
 
 import { categories } from "../utils/data";
-
 import logo from "../../public/logo.png";
-import Image from "next/image";
 
 interface IProps {
-   closeToggle?: boolean;
+   closeToggle?: (e: boolean) => void;
 }
 
 const isNotActiveStyle =
@@ -41,12 +40,7 @@ function Sidebar({ closeToggle }: IProps) {
                </Link>
                <h3 className="mt-2 px-5 text-base 2xl:text-xl">Discover cateogries</h3>
                {categories.slice(0, categories.length - 1).map((category) => (
-                  <Link
-                     //to={`/category/${category.name}`}
-                     onClick={handleCloseSidebar}
-                     key={category.name}
-                     href={""}
-                  >
+                  <Link onClick={handleCloseSidebar} key={category.name} href={""}>
                      <a className={isActive ? isActiveStyle : isNotActiveStyle}>
                         <img src={category.image} className="w-8 h-8 rounded-full shadow-sm" />
                         {category.name}

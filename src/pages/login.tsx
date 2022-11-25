@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import React, { useState } from "react";
 import { Auth } from "aws-amplify";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
-import SubmitButton from "../components/forms/SubmitButton";
-import { useAuth } from "../context/AuthContext";
 
+import SubmitButton from "../components/forms/SubmitButton";
 import authPic from "../../public/auth-img.jpg";
 import logo from "../../public/logo.png";
-import Image from "next/image";
+
 import Input from "../components/forms/FormElements";
 
 interface IFormInput {

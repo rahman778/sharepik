@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { API, Auth, Storage } from "aws-amplify";
-
+import { useState, useEffect } from "react";
+import { Storage } from "aws-amplify";
 import { MdDownloadForOffline, MdOutlineFavoriteBorder, MdOutlineFavorite } from "react-icons/md";
-import { Post } from "../API";
 import { useRouter } from "next/router";
+
+import { Post } from "../API";
 import { useAuth } from "../context/AuthContext";
-import Image from "next/image";
 
 type Props = {
    post: Post;
@@ -16,19 +15,19 @@ function Card({ post }: Props) {
    const { user } = useAuth();
    const [postImage, setPostImage] = useState<string | undefined>(undefined);
 
-   // useEffect(() => {
-   //    async function getImageFromStorage() {
-   //       try {
-   //          const signedURL = await Storage.get(post.image); // get key from Storage.list
-   //          // @ts-ignore
-   //          setPostImage(signedURL);
-   //       } catch (error) {
-   //          console.log("No image found.");
-   //       }
-   //    }
+   useEffect(() => {
+      async function getImageFromStorage() {
+         try {
+            const signedURL = await Storage.get(post.image); // get key from Storage.list
+            // @ts-ignore
+            setPostImage(signedURL);
+         } catch (error) {
+            console.log("No image found.");
+         }
+      }
 
-   //    getImageFromStorage();
-   // }, []);
+      getImageFromStorage();
+   }, []);
 
    return (
       <div
@@ -41,7 +40,7 @@ function Card({ post }: Props) {
                   <div className="flex items-center justify-between">
                      <div className="flex gap-2">
                         <a
-                           //href={`${image?.asset?.url}?dl=`}
+                           href={`${postImage}?dl=`}
                            download
                            onClick={(e) => {
                               e.stopPropagation();
@@ -55,10 +54,9 @@ function Card({ post }: Props) {
                      <button
                         onClick={(e) => {
                            e.stopPropagation();
-                           //savePin(_id);
+                           //savePin();
                         }}
                         type="button"
-                        //className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none"
                      >
                         <MdOutlineFavoriteBorder
                            color="#FF5565"
