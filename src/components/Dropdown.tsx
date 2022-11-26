@@ -58,14 +58,17 @@ function Dropdown({ user }: Props) {
             <div
                className={`${
                   showDropdown ? "block" : "hidden"
-               } absolute z-[90] w-44 py-2 px-4 bg-white rounded divide-y divide-gray-100 shadow right-0 top-10`}
+               } absolute z-[100] w-44 py-2 px-4 bg-white rounded divide-y divide-gray-100 shadow right-0 top-10`}
             >
                <ul
                   className="py-1 text-sm text-gray-700 hover:text-teal-500"
                   aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton"
                >
-                  <li className="cursor-pointer ">
-                     <a onClick={() => onLinkClick(`/profile/${user?.username}`)}>Profile</a>
+                  <li
+                     className="cursor-pointer"
+                     onClick={() => onLinkClick(`/profile/${user?.username}`)}
+                  >
+                     <a>Profile</a>
                   </li>
                </ul>
                <div className="py-1 flex items-center" onClick={signUserOut}>

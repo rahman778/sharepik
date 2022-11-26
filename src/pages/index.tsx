@@ -41,8 +41,6 @@ const Home: NextPage = () => {
       fetchPosts();
    }, []);
 
-   console.log("posts", posts);
-
    const onCategoryClick = async (name: string): Promise<void> => {
       setFetchingPosts(true);
       const searchCategory = (await API.graphql({
@@ -79,7 +77,7 @@ const Home: NextPage = () => {
             </div>
 
             <div className="px-3 mx-auto mt-4">
-               {fetchingPosts ? (
+               {fetchingPosts && (
                   <>
                      <div className="mb-4 columns-1 sm:columns-2 md:columns-3 lg:columns-4">
                         <CardSkeleton />
@@ -88,14 +86,19 @@ const Home: NextPage = () => {
                         <CardSkeleton />
                      </div>
                   </>
-               ) : (
+               )}
+               {posts.length ? (
                   <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4">
                      {posts.map((post) => (
-                        <div className="w-full mb-4" key={post.id}>
+                        <div className="w-full mb-4 " key={post.id}>
                            <Card post={post} />
                         </div>
                      ))}
                   </div>
+               ) : (
+                  <h3 className="text-4xl text-gray-600 text-center mt-8">
+                     Oops! There are no posts to show
+                  </h3>
                )}
             </div>
          </main>

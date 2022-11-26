@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useForm, SubmitHandler } from "react-hook-form";
 import relativeTime from "dayjs/plugin/relativeTime";
 
-import { listPosts, getPost } from "../../graphql/queries";
+import { listPosts, getPost, listComments } from "../../graphql/queries";
 import {
    ListPostsQuery,
    GetPostQuery,
@@ -16,6 +16,7 @@ import {
    CreateCommentInput,
    CreateCommentMutation,
    Comment,
+   ListCommentsQuery,
 } from "../../API";
 import PostComment from "../../components/PostComment";
 import { createComment } from "../../graphql/mutations";
@@ -31,17 +32,19 @@ interface IFormInput {
 
 interface Props {
    post: Post;
+   commentsList: ListCommentsQuery;
 }
 
 dayjs.extend(relativeTime);
 
-export default function IndividualPost({ post }: Props): ReactElement {
-   console.log("post", post);
+export default function IndividualPost({ post, commentsList }: Props): ReactElement {
    const { user } = useAuth();
 
    const [addingComment, setAddingComment] = useState(false);
    const [postImage, setPostImage] = useState<string | undefined>(undefined);
-   const [comments, setComments] = useState<Comment[]>(post?.comments?.items as Comment[]);
+   const [comments, setComments] = useState<Comment[]>(
+      commentsList.listComments!.items as Comment[]
+   );
 
    const {
       register,
@@ -161,8 +164,10 @@ export default function IndividualPost({ post }: Props): ReactElement {
                   </div>
                   <button className="bg-teal-500  py-2 w-48 mt-5 rounded-md text-white font-semibold">
                      <a
-                        href={`${postImage}?dl=`}
+                        href={postImage}
                         download
+                        target="_blank"
+                        rel="noopener noreferrer"
                         onClick={(e) => {
                            e.stopPropagation();
                         }}
@@ -195,12 +200,20 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (context) => 
       },
    })) as { data: GetPostQuery };
 
+   const commentsQuery = (await SSR.API.graphql({
+      query: listComments,
+      variables: {
+         id: postId,
+      },
+   })) as { data: ListCommentsQuery };
+
    return {
       props: {
          post: postsQuery.data.getPost as Post,
+         commentsList: commentsQuery.data as ListCommentsQuery,
       },
 
-      revalidate: 1,
+      revalidate: 2,
    };
 };
 

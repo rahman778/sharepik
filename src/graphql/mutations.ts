@@ -124,6 +124,30 @@ export const updatePost = /* GraphQL */ `
          category
          description
          image
+         author {
+            id
+            username
+            email
+            posts {
+               nextToken
+            }
+            comments {
+               nextToken
+            }
+            createdAt
+            updatedAt
+         }
+         comments {
+            items {
+               id
+               postId
+               owner
+               content
+               createdAt
+               updatedAt
+            }
+            nextToken
+         }
          updatedAt
       }
    }
@@ -203,6 +227,26 @@ export const updateComment = /* GraphQL */ `
             updatedAt
          }
          content
+         post {
+            id
+            owner
+            title
+            createdAt
+            category
+            description
+            image
+            author {
+               id
+               username
+               email
+               createdAt
+               updatedAt
+            }
+            comments {
+               nextToken
+            }
+            updatedAt
+         }
          createdAt
          updatedAt
       }
@@ -228,6 +272,26 @@ export const deleteComment = /* GraphQL */ `
             updatedAt
          }
          content
+         post {
+            id
+            owner
+            title
+            createdAt
+            category
+            description
+            image
+            author {
+               id
+               username
+               email
+               createdAt
+               updatedAt
+            }
+            comments {
+               nextToken
+            }
+            updatedAt
+         }
          createdAt
          updatedAt
       }

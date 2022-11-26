@@ -16,10 +16,12 @@ interface IProps {
    setSearchTerm?: Dispatch<SetStateAction<string>>;
 }
 
-const Navbar = ({ searchTerm, setSearchTerm }: IProps) => {
+const Navbar = ({}: IProps) => {
    const router = useRouter();
 
    const [open, setOpen] = useState<boolean>(false);
+   // To do implement search functionality
+   const [searchTerm, setSearchTerm] = useState<string>("");
 
    const { setShowModal } = useModal();
    const { user } = useAuth();

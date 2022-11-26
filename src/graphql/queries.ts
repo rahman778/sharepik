@@ -8,30 +8,6 @@ export const getProfile = /* GraphQL */ `
          id
          username
          email
-         posts {
-            items {
-               id
-               owner
-               title
-               createdAt
-               category
-               description
-               image
-               updatedAt
-            }
-            nextToken
-         }
-         comments {
-            items {
-               id
-               postId
-               owner
-               content
-               createdAt
-               updatedAt
-            }
-            nextToken
-         }
          createdAt
          updatedAt
       }
@@ -71,16 +47,8 @@ export const getPost = /* GraphQL */ `
             id
             username
             email
-         }
-         comments {
-            items {
-               id
-               owner
-               content
-               createdAt
-               updatedAt
-            }
-            nextToken
+            createdAt
+            updatedAt
          }
          updatedAt
       }
@@ -101,6 +69,8 @@ export const listPosts = /* GraphQL */ `
                id
                username
                email
+               createdAt
+               updatedAt
             }
             updatedAt
          }
@@ -111,7 +81,6 @@ export const listPosts = /* GraphQL */ `
 export const postsByProfile = /* GraphQL */ `
    query PostsByProfile(
       $owner: ID!
-      $title: ModelStringKeyConditionInput
       $sortDirection: ModelSortDirection
       $filter: ModelPostFilterInput
       $limit: Int
@@ -119,7 +88,37 @@ export const postsByProfile = /* GraphQL */ `
    ) {
       postsByProfile(
          owner: $owner
+         sortDirection: $sortDirection
+         filter: $filter
+         limit: $limit
+         nextToken: $nextToken
+      ) {
+         items {
+            id
+            owner
+            title
+            createdAt
+            category
+            description
+            image
+            updatedAt
+         }
+         nextToken
+      }
+   }
+`;
+export const postsByDate = /* GraphQL */ `
+   query PostsByDate(
+      $title: String!
+      $createdAt: ModelStringKeyConditionInput
+      $sortDirection: ModelSortDirection
+      $filter: ModelPostFilterInput
+      $limit: Int
+      $nextToken: String
+   ) {
+      postsByDate(
          title: $title
+         createdAt: $createdAt
          sortDirection: $sortDirection
          filter: $filter
          limit: $limit
@@ -174,16 +173,6 @@ export const searchPosts = /* GraphQL */ `
             category
             description
             image
-            author {
-               id
-               username
-               email
-               createdAt
-               updatedAt
-            }
-            comments {
-               nextToken
-            }
             updatedAt
          }
          nextToken
@@ -209,8 +198,8 @@ export const getComment = /* GraphQL */ `
    query GetComment($id: ID!) {
       getComment(id: $id) {
          id
-         postId
          owner
+         postId
          by {
             id
             username
@@ -224,6 +213,26 @@ export const getComment = /* GraphQL */ `
             createdAt
             updatedAt
          }
+         post {
+            id
+            owner
+            title
+            createdAt
+            category
+            description
+            image
+            author {
+               id
+               username
+               email
+               createdAt
+               updatedAt
+            }
+            comments {
+               nextToken
+            }
+            updatedAt
+         }
          content
          createdAt
          updatedAt
@@ -235,7 +244,6 @@ export const listComments = /* GraphQL */ `
       listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
          items {
             id
-            postId
             owner
             by {
                id
@@ -255,7 +263,6 @@ export const listComments = /* GraphQL */ `
 export const commentsByProfile = /* GraphQL */ `
    query CommentsByProfile(
       $owner: ID!
-      $content: ModelStringKeyConditionInput
       $sortDirection: ModelSortDirection
       $filter: ModelCommentFilterInput
       $limit: Int
@@ -263,7 +270,6 @@ export const commentsByProfile = /* GraphQL */ `
    ) {
       commentsByProfile(
          owner: $owner
-         content: $content
          sortDirection: $sortDirection
          filter: $filter
          limit: $limit
@@ -271,7 +277,50 @@ export const commentsByProfile = /* GraphQL */ `
       ) {
          items {
             id
+            owner
             postId
+            by {
+               id
+               username
+               email
+               createdAt
+               updatedAt
+            }
+            post {
+               id
+               owner
+               title
+               createdAt
+               category
+               description
+               image
+               updatedAt
+            }
+            content
+            createdAt
+            updatedAt
+         }
+         nextToken
+      }
+   }
+`;
+export const commentsByPost = /* GraphQL */ `
+   query CommentsByPost(
+      $postId: ID!
+      $sortDirection: ModelSortDirection
+      $filter: ModelCommentFilterInput
+      $limit: Int
+      $nextToken: String
+   ) {
+      commentsByPost(
+         postId: $postId
+         sortDirection: $sortDirection
+         filter: $filter
+         limit: $limit
+         nextToken: $nextToken
+      ) {
+         items {
+            id
             owner
             by {
                id

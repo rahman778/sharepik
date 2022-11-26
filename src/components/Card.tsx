@@ -4,7 +4,6 @@ import { MdDownloadForOffline, MdOutlineFavoriteBorder, MdOutlineFavorite } from
 import { useRouter } from "next/router";
 
 import { Post } from "../API";
-import { useAuth } from "../context/AuthContext";
 
 type Props = {
    post: Post;
@@ -12,7 +11,6 @@ type Props = {
 
 function Card({ post }: Props) {
    const router = useRouter();
-   const { user } = useAuth();
    const [postImage, setPostImage] = useState<string | undefined>(undefined);
 
    useEffect(() => {
@@ -29,6 +27,8 @@ function Card({ post }: Props) {
       getImageFromStorage();
    }, []);
 
+   console.log("postImage", postImage);
+
    return (
       <div
          className="cursor-pointer relative group rounded-md"
@@ -40,7 +40,9 @@ function Card({ post }: Props) {
                   <div className="flex items-center justify-between">
                      <div className="flex gap-2">
                         <a
-                           href={`${postImage}?dl=`}
+                           href={`${postImage}`}
+                           target="_blank"
+                           rel="noopener noreferrer"
                            download
                            onClick={(e) => {
                               e.stopPropagation();
@@ -67,16 +69,14 @@ function Card({ post }: Props) {
                </div>
             </div>
          </div>
-         <div className="z-50 opacity-0 rounded-md group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-black/80 to-transparent bg-gradient-to-t inset-x-0 bottom-0 pt-20 text-white flex items-end">
-            <div>
-               <div className="p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 transform transition duration-300 ease-in-out">
-                  <div className="font-bold">{post?.title}</div>
+         {post.image && postImage && <img alt="" className="w-full rounded-md" src={postImage} />}
+         <div className="z-50 opacity-0 rounded-md group-hover:opacity-100 transition duration-300 ease-in-out cursor-pointer absolute from-black/80 to-transparent bg-gradient-to-t inset-x-0 bottom-0 text-white flex items-end">
+            <div className="p-4 space-y-3 text-xl group-hover:opacity-100 group-hover:translate-y-0 translate-y-4 transform transition duration-300 ease-in-out">
+               <div className="font-bold">{post?.title}</div>
 
-                  <div className="opacity-60 text-sm ">{post?.description}</div>
-               </div>
+               <div className="opacity-60 text-sm ">{post?.description}</div>
             </div>
          </div>
-         {post.image && postImage && <img alt="" className="w-full rounded-md" src={postImage} />}
       </div>
    );
 }

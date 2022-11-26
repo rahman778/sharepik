@@ -253,6 +253,26 @@ export const onCreateComment = /* GraphQL */ `
         updatedAt
       }
       content
+      post {
+        id
+        owner
+        title
+        createdAt
+        category
+        description
+        image
+        author {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -281,6 +301,26 @@ export const onUpdateComment = /* GraphQL */ `
         updatedAt
       }
       content
+      post {
+        id
+        owner
+        title
+        createdAt
+        category
+        description
+        image
+        author {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -309,6 +349,26 @@ export const onDeleteComment = /* GraphQL */ `
         updatedAt
       }
       content
+      post {
+        id
+        owner
+        title
+        createdAt
+        category
+        description
+        image
+        author {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
       createdAt
       updatedAt
     }
