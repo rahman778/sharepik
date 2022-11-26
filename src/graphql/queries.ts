@@ -3,328 +3,288 @@
 // this is an auto generated file. This will be overwritten
 
 export const getProfile = /* GraphQL */ `
-  query GetProfile($id: ID!) {
-    getProfile(id: $id) {
-      id
-      username
-      email
-      posts {
-        items {
-          id
-          profileID
-          title
-          createdAt
-          category
-          description
-          image
-          updatedAt
-          owner
-        }
-        nextToken
+   query GetProfile($id: ID!) {
+      getProfile(id: $id) {
+         id
+         username
+         email
+         posts {
+            items {
+               id
+               owner
+               title
+               createdAt
+               category
+               description
+               image
+               updatedAt
+            }
+            nextToken
+         }
+         comments {
+            items {
+               id
+               postId
+               owner
+               content
+               createdAt
+               updatedAt
+            }
+            nextToken
+         }
+         createdAt
+         updatedAt
       }
-      comments {
-        items {
-          id
-          profileID
-          postID
-          content
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-      owner
-    }
-  }
+   }
 `;
 export const listProfiles = /* GraphQL */ `
-  query ListProfiles(
-    $filter: ModelProfileFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listProfiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        username
-        email
-        posts {
-          nextToken
-        }
-        comments {
-          nextToken
-        }
-        createdAt
-        updatedAt
-        owner
+   query ListProfiles($filter: ModelProfileFilterInput, $limit: Int, $nextToken: String) {
+      listProfiles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+         items {
+            id
+            username
+            email
+            posts {
+               nextToken
+            }
+            comments {
+               nextToken
+            }
+            createdAt
+            updatedAt
+         }
+         nextToken
       }
-      nextToken
-    }
-  }
+   }
 `;
 export const getPost = /* GraphQL */ `
-  query GetPost($id: ID!) {
-    getPost(id: $id) {
-      id
-      profileID
-      title
-      createdAt
-      category
-      description
-      image
-      profile {
-        id
-        username
-        email
-        posts {
-          nextToken
-        }
-        comments {
-          nextToken
-        }
-        createdAt
-        updatedAt
-        owner
+   query GetPost($id: ID!) {
+      getPost(id: $id) {
+         id
+         owner
+         title
+         createdAt
+         category
+         description
+         image
+         author {
+            id
+            username
+            email
+         }
+         comments {
+            items {
+               id
+               owner
+               content
+               createdAt
+               updatedAt
+            }
+            nextToken
+         }
+         updatedAt
       }
-      comments {
-        items {
-          id
-          profileID
-          postID
-          content
-          createdAt
-          updatedAt
-          owner
-        }
-        nextToken
-      }
-      updatedAt
-      owner
-    }
-  }
+   }
 `;
 export const listPosts = /* GraphQL */ `
-  query ListPosts(
-    $filter: ModelPostFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        profileID
-        title
-        createdAt
-        category
-        description
-        image
-        profile {
-          id
-          username
-          email
-          createdAt
-          updatedAt
-          owner
-        }
-        comments {
-          nextToken
-        }
-        updatedAt
-        owner
+   query ListPosts($filter: ModelPostFilterInput, $limit: Int, $nextToken: String) {
+      listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+         items {
+            id
+            owner
+            title
+            createdAt
+            category
+            description
+            image
+            author {
+               id
+               username
+               email
+            }
+            updatedAt
+         }
+         nextToken
       }
-      nextToken
-    }
-  }
+   }
 `;
-export const postsByDate = /* GraphQL */ `
-  query PostsByDate(
-    $title: String!
-    $createdAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelPostFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    postsByDate(
-      title: $title
-      createdAt: $createdAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        profileID
-        title
-        createdAt
-        category
-        description
-        image
-        profile {
-          id
-          username
-          email
-          createdAt
-          updatedAt
-          owner
-        }
-        comments {
-          nextToken
-        }
-        updatedAt
-        owner
+export const postsByProfile = /* GraphQL */ `
+   query PostsByProfile(
+      $owner: ID!
+      $title: ModelStringKeyConditionInput
+      $sortDirection: ModelSortDirection
+      $filter: ModelPostFilterInput
+      $limit: Int
+      $nextToken: String
+   ) {
+      postsByProfile(
+         owner: $owner
+         title: $title
+         sortDirection: $sortDirection
+         filter: $filter
+         limit: $limit
+         nextToken: $nextToken
+      ) {
+         items {
+            id
+            owner
+            title
+            createdAt
+            category
+            description
+            image
+            author {
+               id
+               username
+               email
+               createdAt
+               updatedAt
+            }
+            comments {
+               nextToken
+            }
+            updatedAt
+         }
+         nextToken
       }
-      nextToken
-    }
-  }
+   }
 `;
 export const searchPosts = /* GraphQL */ `
-  query SearchPosts(
-    $filter: SearchablePostFilterInput
-    $sort: [SearchablePostSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchablePostAggregationInput]
-  ) {
-    searchPosts(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        profileID
-        title
-        createdAt
-        category
-        description
-        image
-        profile {
-          id
-          username
-          email
-          createdAt
-          updatedAt
-          owner
-        }
-        comments {
-          nextToken
-        }
-        updatedAt
-        owner
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
+   query SearchPosts(
+      $filter: SearchablePostFilterInput
+      $sort: [SearchablePostSortInput]
+      $limit: Int
+      $nextToken: String
+      $from: Int
+      $aggregates: [SearchablePostAggregationInput]
+   ) {
+      searchPosts(
+         filter: $filter
+         sort: $sort
+         limit: $limit
+         nextToken: $nextToken
+         from: $from
+         aggregates: $aggregates
+      ) {
+         items {
+            id
+            owner
+            title
+            createdAt
+            category
+            description
+            image
+            author {
+               id
+               username
+               email
+               createdAt
+               updatedAt
             }
-          }
-        }
+            comments {
+               nextToken
+            }
+            updatedAt
+         }
+         nextToken
+         total
+         aggregateItems {
+            name
+            result {
+               ... on SearchableAggregateScalarResult {
+                  value
+               }
+               ... on SearchableAggregateBucketResult {
+                  buckets {
+                     key
+                     doc_count
+                  }
+               }
+            }
+         }
       }
-    }
-  }
+   }
 `;
 export const getComment = /* GraphQL */ `
-  query GetComment($id: ID!) {
-    getComment(id: $id) {
-      id
-      profileID
-      postID
-      profile {
-        id
-        username
-        email
-        posts {
-          nextToken
-        }
-        comments {
-          nextToken
-        }
-        createdAt
-        updatedAt
-        owner
+   query GetComment($id: ID!) {
+      getComment(id: $id) {
+         id
+         postId
+         owner
+         by {
+            id
+            username
+            email
+            posts {
+               nextToken
+            }
+            comments {
+               nextToken
+            }
+            createdAt
+            updatedAt
+         }
+         content
+         createdAt
+         updatedAt
       }
-      post {
-        id
-        profileID
-        title
-        createdAt
-        category
-        description
-        image
-        profile {
-          id
-          username
-          email
-          createdAt
-          updatedAt
-          owner
-        }
-        comments {
-          nextToken
-        }
-        updatedAt
-        owner
-      }
-      content
-      createdAt
-      updatedAt
-      owner
-    }
-  }
+   }
 `;
 export const listComments = /* GraphQL */ `
-  query ListComments(
-    $filter: ModelCommentFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        profileID
-        postID
-        profile {
-          id
-          username
-          email
-          createdAt
-          updatedAt
-          owner
-        }
-        post {
-          id
-          profileID
-          title
-          createdAt
-          category
-          description
-          image
-          updatedAt
-          owner
-        }
-        content
-        createdAt
-        updatedAt
-        owner
+   query ListComments($filter: ModelCommentFilterInput, $limit: Int, $nextToken: String) {
+      listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
+         items {
+            id
+            postId
+            owner
+            by {
+               id
+               username
+               email
+               createdAt
+               updatedAt
+            }
+            content
+            createdAt
+            updatedAt
+         }
+         nextToken
       }
-      nextToken
-    }
-  }
+   }
+`;
+export const commentsByProfile = /* GraphQL */ `
+   query CommentsByProfile(
+      $owner: ID!
+      $content: ModelStringKeyConditionInput
+      $sortDirection: ModelSortDirection
+      $filter: ModelCommentFilterInput
+      $limit: Int
+      $nextToken: String
+   ) {
+      commentsByProfile(
+         owner: $owner
+         content: $content
+         sortDirection: $sortDirection
+         filter: $filter
+         limit: $limit
+         nextToken: $nextToken
+      ) {
+         items {
+            id
+            postId
+            owner
+            by {
+               id
+               username
+               email
+               createdAt
+               updatedAt
+            }
+            content
+            createdAt
+            updatedAt
+         }
+         nextToken
+      }
+   }
 `;

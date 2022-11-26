@@ -23,6 +23,7 @@ import { useAuth } from "../../context/AuthContext";
 import Avatar from "../../components/Avatar";
 import { MdDownloadForOffline } from "react-icons/md";
 import ImagePreview from "../../components/ImagePreview";
+import getUserName from "../../utils/getUserName";
 
 interface IFormInput {
    comment: string;
@@ -35,6 +36,7 @@ interface Props {
 dayjs.extend(relativeTime);
 
 export default function IndividualPost({ post }: Props): ReactElement {
+   console.log("post", post);
    const { user } = useAuth();
 
    const [addingComment, setAddingComment] = useState(false);
@@ -74,9 +76,9 @@ export default function IndividualPost({ post }: Props): ReactElement {
          setAddingComment(true);
 
          const newCommentInput: CreateCommentInput = {
-            postID: post.id,
-            profileID: user.username,
+            owner: user.username,
             content: data.comment,
+            postId: post.id,
          };
          // Add Comment Mutation
          const createNewComment = (await API.graphql({
@@ -101,8 +103,11 @@ export default function IndividualPost({ post }: Props): ReactElement {
                   {user && (
                      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className="mt-10">
                         <div className="flex flex-wrap items-center mt-6 gap-4">
-                           <Link href={`/profile`}>
-                              <Avatar name="AR" classes="h-10 w-10 text-xl font-semibold" />
+                           <Link href={`/profile${post.owner}`}>
+                              <Avatar
+                                 name={getUserName(post.author!.email)}
+                                 classes="h-10 w-10 text-xl font-semibold"
+                              />
                            </Link>
                            <input
                               className=" flex-1 border-gray-200 text-gray-700 outline-none border p-2 rounded-md focus:border-gray-300"
@@ -138,10 +143,13 @@ export default function IndividualPost({ post }: Props): ReactElement {
                   <div className="flex-col items-start">
                      <div className="flex flex-row items-center">
                         <div>
-                           <Avatar name={"sd"} classes="h-12 w-12 text-2xl font-semibold" />
+                           <Avatar
+                              name={getUserName(post.author!.email)}
+                              classes="h-12 w-12 text-2xl font-semibold"
+                           />
                         </div>
                         <div className="ml-6">
-                           <div>{post.owner}</div>
+                           <div>{getUserName(post.author!.email)}</div>
                            <p className="mb-0 text-sm text-gray-400">
                               {dayjs(post.createdAt).fromNow()}
                            </p>
@@ -151,13 +159,14 @@ export default function IndividualPost({ post }: Props): ReactElement {
                      <h3 className="text-2xl mt-5 text-gray-700"> {post.title}</h3>
                      <p className="mt-4">{post.description}</p>
                   </div>
-                  <button className="bg-teal-500 flex items-center justify-center py-2 w-48 mt-5 rounded-md text-white font-semibold">
+                  <button className="bg-teal-500  py-2 w-48 mt-5 rounded-md text-white font-semibold">
                      <a
                         href={`${postImage}?dl=`}
                         download
                         onClick={(e) => {
                            e.stopPropagation();
                         }}
+                        className="flex items-center justify-center"
                      >
                         <MdDownloadForOffline color="#fff" fontSize={22} />
                         <span className="ml-3">Download</span>

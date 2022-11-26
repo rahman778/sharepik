@@ -4,35 +4,61 @@
 #    globalAuthRule: AuthRule = { allow: public }
 # } # FOR TESTING ONLY!
 
-type Profile @model @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+type Profile
+   @model
+   @auth(
+      rules: [
+         { allow: groups, groups: ["admin"] }
+         { allow: owner, ownerField: "id", operations: [update] }
+         { allow: public, operations: [read] }
+         { allow: private, operations: [read] }
+      ]
+   ) {
    id: ID!
    username: String!
    email: String!
-   posts: [Post] @hasMany(indexName: "byProfile", fields: ["id"])
-   comments: [Comment] @hasMany(indexName: "byProfile", fields: ["id"])
+   posts: [Post] @hasMany(indexName: "postsByProfile", fields: ["id"])
+   comments: [Comment] @hasMany(indexName: "commentsByProfile", fields: ["id"])
 }
 
 type Post
    @model
    @searchable
-   @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+   @auth(
+      rules: [
+         { allow: groups, groups: ["admin"] }
+         { allow: owner }
+         { allow: public, operations: [read] }
+         { allow: private, operations: [read] }
+      ]
+   ) {
    id: ID!
-   profileID: ID! @index(name: "byProfile", sortKeyFields: ["title"])
+   owner: ID @index(name: "postsByProfile", queryField: "postsByProfile", sortKeyFields: "title")
    title: String!
-      @index(name: "postsByDate", queryField: "postsByDate", sortKeyFields: ["createdAt"])
    createdAt: String!
    category: String!
    description: String
    image: String!
-   profile: Profile! @belongsTo(fields: ["profileID"])
-   comments: [Comment] @hasMany(indexName: "byPost", fields: ["id"])
+   author: Profile @belongsTo(fields: ["owner"])
+   comments: [Comment] @hasMany(indexName: "commentsByPost", fields: ["id"])
 }
 
-type Comment @model @auth(rules: [{ allow: owner }, { allow: public, operations: [read] }]) {
+type Comment
+   @model
+   @auth(
+      rules: [
+         { allow: groups, groups: ["admin"] }
+         { allow: owner }
+         { allow: public, operations: [read] }
+         { allow: private, operations: [read] }
+      ]
+   ) {
    id: ID!
-   profileID: ID! @index(name: "byProfile", sortKeyFields: ["content"])
-   postID: ID! @index(name: "byPost", sortKeyFields: ["content"])
-   profile: Profile! @belongsTo(fields: ["profileID"])
-   post: Post @belongsTo(fields: ["postID"])
+   postId: ID!
+      @index(name: "commentsByPost", queryField: "commentsByPost", sortKeyFields: "content")
+   owner: ID
+      @index(name: "commentsByProfile", queryField: "commentsByProfile", sortKeyFields: "content")
+   by: Profile @belongsTo(fields: ["owner"])
    content: String!
+   post: Post @belongsTo(fields: ["postId"])
 }

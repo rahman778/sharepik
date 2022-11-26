@@ -21,7 +21,7 @@
       "function": {
         "sharepicf0a29b0c": {
           "deploymentBucketName": "amplify-sharepic-dev-133929-deployment",
-          "s3Key": "amplify-builds/sharepicf0a29b0c-415a4a47372b45376a4b-build.zip"
+          "s3Key": "amplify-builds/sharepicf0a29b0c-536f6d6e4f4861745449-build.zip"
         }
       },
       "storage": {

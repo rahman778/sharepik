@@ -52,7 +52,7 @@ export default function Create({}: Props): ReactElement {
          });
 
          const createNewPostInput: CreatePostInput = {
-            profileID: user!.username,
+            owner: user!.username,
             title: data.title,
             description: data.description,
             category: data.category,
