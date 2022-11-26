@@ -18,6 +18,7 @@ function Dropdown({ user }: Props) {
    const signUserOut = async () => {
       await Auth.signOut();
       setShowDropdown(false);
+      router.push("/");
    };
 
    const onLinkClick = (link: string) => {

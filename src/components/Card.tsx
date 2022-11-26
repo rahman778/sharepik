@@ -27,8 +27,6 @@ function Card({ post }: Props) {
       getImageFromStorage();
    }, []);
 
-   console.log("postImage", postImage);
-
    return (
       <div
          className="cursor-pointer relative group rounded-md"
