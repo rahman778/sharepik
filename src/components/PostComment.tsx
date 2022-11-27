@@ -21,7 +21,7 @@ export default function PostComment({ comment }: Props): ReactElement {
             />
             <div className="flex flex-col">
                <div className="flex flex-row items-center">
-                  <p className="font-bold mb-0">{getUserName(comment.by!.email)}</p>
+                  <p className="font-bold mb-0 capitalize">{getUserName(comment.by!.email)}</p>
                   <p className="text-sm text-gray-400 mb-0 ml-4">
                      {dayjs(comment.createdAt).fromNow()}
                   </p>

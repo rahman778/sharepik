@@ -5,10 +5,12 @@ import { GRAPHQL_AUTH_MODE } from "@aws-amplify/api";
 import { ParsedUrlQuery } from "querystring";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { toast } from "react-toastify";
 
-import { listPosts, getPost, listComments } from "../../graphql/queries";
+import { listPosts, getPost, commentsByPost } from "../../graphql/queries";
 import {
    ListPostsQuery,
    GetPostQuery,
@@ -16,7 +18,7 @@ import {
    CreateCommentInput,
    CreateCommentMutation,
    Comment,
-   ListCommentsQuery,
+   CommentsByPostQuery,
 } from "../../API";
 import PostComment from "../../components/PostComment";
 import { createComment } from "../../graphql/mutations";
@@ -32,19 +34,20 @@ interface IFormInput {
 
 interface Props {
    post: Post;
-   commentsList: ListCommentsQuery;
 }
 
 dayjs.extend(relativeTime);
 
-export default function IndividualPost({ post, commentsList }: Props): ReactElement {
+export default function IndividualPost({ post }: Props): ReactElement {
    const { user } = useAuth();
+   const router = useRouter();
+
+   const { postId } = router.query;
 
    const [addingComment, setAddingComment] = useState(false);
    const [postImage, setPostImage] = useState<string | undefined>(undefined);
-   const [comments, setComments] = useState<Comment[]>(
-      commentsList.listComments!.items as Comment[]
-   );
+   const [comments, setComments] = useState<Comment[]>([]);
+   const [loadingImage, setLoadingImage] = useState<boolean>(false);
 
    const {
       register,
@@ -61,7 +64,31 @@ export default function IndividualPost({ post, commentsList }: Props): ReactElem
    }, [formState, reset]);
 
    useEffect(() => {
+      const fetchComments = async () => {
+         const allComments = (await API.graphql({
+            query: commentsByPost,
+            variables: {
+               postId,
+            },
+         })) as {
+            data: CommentsByPostQuery;
+            errors: any[];
+         };
+
+         if (allComments.data) {
+            setComments(allComments?.data?.commentsByPost?.items as Comment[]);
+         } else {
+            toast.error("Could not get comments");
+            throw new Error("Could not get comments");
+         }
+      };
+
+      fetchComments();
+   }, [postId]);
+
+   useEffect(() => {
       async function getImageFromStorage() {
+         setLoadingImage(true);
          try {
             const signedURL = await Storage.get(post.image); // get key from Storage.list
             // @ts-ignore
@@ -69,6 +96,7 @@ export default function IndividualPost({ post, commentsList }: Props): ReactElem
          } catch (error) {
             console.log("No image found.");
          }
+         setLoadingImage(false);
       }
 
       getImageFromStorage();
@@ -136,7 +164,7 @@ export default function IndividualPost({ post, commentsList }: Props): ReactElem
                      </form>
                   )}
 
-                  {comments.map((comment) => (
+                  {comments?.map((comment) => (
                      <PostComment key={comment.id} comment={comment} />
                   ))}
                </div>
@@ -152,7 +180,7 @@ export default function IndividualPost({ post, commentsList }: Props): ReactElem
                            />
                         </div>
                         <div className="ml-6">
-                           <div>{getUserName(post.author!.email)}</div>
+                           <div className="capitalize">{getUserName(post.author!.email)}</div>
                            <p className="mb-0 text-sm text-gray-400">
                               {dayjs(post.createdAt).fromNow()}
                            </p>
@@ -200,17 +228,9 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (context) => 
       },
    })) as { data: GetPostQuery };
 
-   const commentsQuery = (await SSR.API.graphql({
-      query: listComments,
-      variables: {
-         id: postId,
-      },
-   })) as { data: ListCommentsQuery };
-
    return {
       props: {
          post: postsQuery.data.getPost as Post,
-         commentsList: commentsQuery.data as ListCommentsQuery,
       },
 
       revalidate: 2,
