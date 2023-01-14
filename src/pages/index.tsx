@@ -34,6 +34,7 @@ const Home: NextPage = () => {
             return allPosts?.data?.listPosts?.items as Post[];
          } else {
             toast.error("Could not get posts");
+            setFetchingPosts(false);
             throw new Error("Could not get posts");
          }
       };
@@ -64,7 +65,7 @@ const Home: NextPage = () => {
    return (
       <div className="mb-10">
          <Head>
-            <title>Share Pic</title>
+            <title>SharePik</title>
             <meta name="description" content="Image sharing app" />
             <link rel="icon" href="/favicon.ico" />
          </Head>
